@@ -1,8 +1,12 @@
 ﻿<Window x:Class="ClassFromQueryGenerator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mvvmTemplateSelection="clr-namespace:MVVMTemplateSelection;assembly=MVVMTemplateSelection"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+ <Window.Resources>
+     <mvvmTemplateSelection:ConventionTemplateSelector x:Key="cts" />
+ </Window.Resources>
+   
+        <ContentControl ContentTemplateSelector="{StaticResource cts}"/>
+   
 </Window>
