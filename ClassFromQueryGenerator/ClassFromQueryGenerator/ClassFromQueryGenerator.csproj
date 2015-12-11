@@ -104,6 +104,7 @@
     <Compile Include="Generator\Gen.cs" />
     <Compile Include="FieldInfo.cs" />
     <Compile Include="ResultInfo.cs" />
+    <Compile Include="tmp.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\MainView.xaml.cs">

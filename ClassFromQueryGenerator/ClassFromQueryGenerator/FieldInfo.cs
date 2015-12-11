@@ -8,7 +8,7 @@ namespace ClassFromQueryGenerator
 {
    public class FieldInfo
     {
-        public Type CSharpType { get; set; }
+        public Type Type { get; set; }
         public string Name { get; set; }
 
     }

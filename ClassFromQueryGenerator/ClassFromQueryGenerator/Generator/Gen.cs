@@ -13,7 +13,6 @@ namespace ClassFromQueryGenerator.Generator
         private readonly string _tableName;
         private readonly string _classMacro;
         private readonly string _propMacro;
-
         public Gen(ResultInfo resultInfo)
         {
             _resultInfo = resultInfo;
@@ -26,11 +25,12 @@ namespace ClassFromQueryGenerator.Generator
             scope.SetVariable("Model", _resultInfo);
             var pyf =
                 @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\PyMacros\Macro.py";
-
+           
             var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
             return result;
 
         }
+        public string Test { get; set; }
     }
 }

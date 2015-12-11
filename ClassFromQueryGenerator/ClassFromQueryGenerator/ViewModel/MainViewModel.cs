@@ -49,7 +49,6 @@ namespace ClassFromQueryGenerator.ViewModel
             FieldTypeConverter c=new FieldTypeConverter();
             ResultInfo ri=new ResultInfo();
             ri.Name = "test";
-
             using (var conn=new SqlConnection(CS))
             using (var cmd=conn.CreateCommand())
             {
@@ -63,21 +62,16 @@ namespace ClassFromQueryGenerator.ViewModel
                         var type = r.GetFieldType(i);
                         FieldInfo fi = new FieldInfo
                         {
-                            CSharpType = c.Convert(type),
+                            Type = c.Convert(type),
                             Name = name
                         };
-
                         ri.Fields.Add(fi);
-
                     }
-                    
                 }
             }
             var a = ri;
             Gen g=new Gen(a);
-           Result= g.Generate();
-            
-
+            Result= g.Generate();
         }
 
         public string Result
