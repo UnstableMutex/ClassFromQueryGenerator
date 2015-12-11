@@ -8,28 +8,29 @@ namespace ClassFromQueryGenerator.Generator
 {
     class Gen
     {
+        private readonly ResultInfo _resultInfo;
         private readonly string _cs;
         private readonly string _tableName;
         private readonly string _classMacro;
         private readonly string _propMacro;
 
-        public Gen(string cs, string tableName)
+        public Gen(ResultInfo resultInfo)
         {
-            _cs = cs;
-            _tableName = tableName;
-
-            _propMacro =
-                @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\ClassFromQueryGenerator\bin\Debug\Macros\Property\sample.txt";
-
-            _classMacro=@"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\ClassFromQueryGenerator\bin\Debug\Macros\Class\sample.txt";
-       
+            _resultInfo = resultInfo;
         }
 
-        public void Generate()
+        public string Generate()
         {
+          var engine=  IronPython.Hosting.Python.CreateEngine();
+  var scope= engine.CreateScope();
+            scope.SetVariable("Model", _resultInfo);
+            var pyf =
+                @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\ClassFromQueryGenerator\bin\Debug\Macros\Python\Macro.py";
 
+            var res=     engine.ExecuteFile(pyf,scope);
+            var result = res.GetVariable("result").ToString();
+            return result;
 
-            
         }
     }
 }

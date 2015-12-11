@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace ClassFromQueryGenerator
 {
-    class ResultInfo
+   public class ResultInfo
     {
+        public ResultInfo()
+        {
+            Fields = new List<FieldInfo>();
+        }
         public string Name { get; set; }
-        public IEnumerable<FieldInfo> Fields { get; set; }
+        public List<FieldInfo> Fields { get; set; }
     }
 }

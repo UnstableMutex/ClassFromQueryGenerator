@@ -99,6 +99,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\SimpleCommand.cs" />
+    <Compile Include="Generator\FieldTypeConverter.cs" />
     <Compile Include="Generator\Gen.cs" />
     <Compile Include="FieldInfo.cs" />
     <Compile Include="ResultInfo.cs" />

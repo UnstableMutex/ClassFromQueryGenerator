@@ -16,7 +16,9 @@
             
             <Label>Macros:</Label>
             <ComboBox />
-        </cap:CoupleAlignmentPanel>
+        </cap:CoupleAlignmentPanel> 
         <Button DockPanel.Dock="Bottom" Command="{Binding GenerateCommand}" >Do</Button>
+        <TextBox DockPanel.Dock="Top" Text="{Binding Result}"/>
+      
     </DockPanel>
 </UserControl>

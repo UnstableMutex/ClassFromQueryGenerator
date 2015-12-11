@@ -6,5 +6,5 @@
     <Window.Resources>
         <mvvmTemplateSelection:ConventionTemplateSelector x:Key="cts" />
     </Window.Resources>
-    <ContentControl ContentTemplateSelector="{StaticResource cts}"/>
+    <ContentControl Content="{Binding Source={StaticResource Locator}, Path=Main}" ContentTemplateSelector="{StaticResource cts}"/>
 </Window>

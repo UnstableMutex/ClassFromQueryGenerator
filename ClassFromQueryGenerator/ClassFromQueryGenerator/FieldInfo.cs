@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ClassFromQueryGenerator
 {
-    class FieldInfo
+   public class FieldInfo
     {
-        public string CSharpType { get; set; }
+        public Type CSharpType { get; set; }
         public string Name { get; set; }
 
     }
