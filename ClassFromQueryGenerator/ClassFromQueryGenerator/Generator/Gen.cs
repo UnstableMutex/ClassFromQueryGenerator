@@ -21,13 +21,13 @@ namespace ClassFromQueryGenerator.Generator
 
         public string Generate()
         {
-          var engine=  IronPython.Hosting.Python.CreateEngine();
-  var scope= engine.CreateScope();
+            var engine = IronPython.Hosting.Python.CreateEngine();
+            var scope = engine.CreateScope();
             scope.SetVariable("Model", _resultInfo);
             var pyf =
-                @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\ClassFromQueryGenerator\bin\Debug\Macros\Python\Macro.py";
+                @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\PyMacros\Macro.py";
 
-            var res=     engine.ExecuteFile(pyf,scope);
+            var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
             return result;
 
