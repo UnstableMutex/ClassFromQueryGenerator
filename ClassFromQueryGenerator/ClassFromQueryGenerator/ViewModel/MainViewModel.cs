@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 
 namespace ClassFromQueryGenerator.ViewModel
@@ -30,5 +31,9 @@ namespace ClassFromQueryGenerator.ViewModel
             ////    // Code runs "for real"
             ////}
         }
+        public string CS { get; set; }
+        public string Query { get; set; }
+        public ICommand GenerateCommand { get; set; }
+
     }
 }
