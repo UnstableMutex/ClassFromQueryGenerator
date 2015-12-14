@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using ClassFromQueryGenerator.Command;
 using ClassFromQueryGenerator.Generator;
@@ -44,6 +47,19 @@ namespace ClassFromQueryGenerator.ViewModel
         public string Query { get; set; }
         public ICommand GenerateCommand { get; set; }
 
+        public IEnumerable<string> Macroses
+        {
+            get { return GetFiles(); }
+        }
+        public string SelectedMacros { get; set; }
+
+        private IEnumerable<string> GetFiles()
+        {
+            var fils = Directory.GetFiles(Constants.MacroPath, "*.py");
+          var res=  fils.Select(Path.GetFileNameWithoutExtension);
+            return res;
+        }
+
         void Generate()
         {
             FieldTypeConverter c=new FieldTypeConverter();
@@ -71,7 +87,7 @@ namespace ClassFromQueryGenerator.ViewModel
             }
             var a = ri;
             Gen g=new Gen(a);
-            Result= g.Generate();
+            Result = g.Generate(SelectedMacros);
         }
 
         public string Result

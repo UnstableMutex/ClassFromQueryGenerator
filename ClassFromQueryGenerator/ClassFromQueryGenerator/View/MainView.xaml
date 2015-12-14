@@ -4,19 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cap="clr-namespace:CAP;assembly=CAP"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             mc:Ignorable="d">
     <DockPanel>
-        <cap:CoupleAlignmentPanel DockPanel.Dock="Top">
-          
-              <Label>CS:</Label>
-            <TextBox Text="{Binding CS}"/>
-            <Label>Query:</Label>
-            <TextBox Text="{Binding Query}"/>        
+        <Grid DockPanel.Dock="Top">
+          <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             
-            <Label>Macros:</Label>
-            <ComboBox />
-        </cap:CoupleAlignmentPanel> 
+            
+              <Label>CS:</Label>
+            <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="1" Text="{Binding CS}" Height="60"/>
+            <Label Grid.Row="1">Query:</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Query}"/>        
+            
+            <Label Grid.Row="2">Macros:</Label>
+            <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Macroses}" SelectedItem="{Binding SelectedMacros}" />
+        </Grid> 
         <Button DockPanel.Dock="Bottom" Command="{Binding GenerateCommand}" >Do</Button>
         <TextBox DockPanel.Dock="Top" Text="{Binding Result}"/>
       

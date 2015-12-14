@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,14 +19,13 @@ namespace ClassFromQueryGenerator.Generator
             _resultInfo = resultInfo;
         }
 
-        public string Generate()
+        public string Generate(string shortFN)
         {
             var engine = IronPython.Hosting.Python.CreateEngine();
             var scope = engine.CreateScope();
             scope.SetVariable("Model", _resultInfo);
-            var pyf =
-                @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\PyMacros\Macro.py";
-           
+            var pyf =Path.Combine(Constants.MacroPath,shortFN+".py");
+
             var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
             return result;
