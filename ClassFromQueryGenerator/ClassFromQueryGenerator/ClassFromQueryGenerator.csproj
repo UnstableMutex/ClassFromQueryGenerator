@@ -59,6 +59,10 @@
     <Reference Include="IronPython.Wpf">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net45\IronPython.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="LiteDB, Version=2.0.0.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.2.0.0\lib\net35\LiteDB.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Dynamic">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net45\Microsoft.Dynamic.dll</HintPath>
     </Reference>
@@ -101,6 +105,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\SimpleCommand.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="CSItem.cs" />
     <Compile Include="Generator\FieldTypeConverter.cs" />
     <Compile Include="Generator\Gen.cs" />
     <Compile Include="FieldInfo.cs" />

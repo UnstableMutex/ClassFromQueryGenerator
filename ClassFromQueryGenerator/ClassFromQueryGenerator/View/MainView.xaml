@@ -7,7 +7,7 @@
              mc:Ignorable="d">
     <DockPanel>
         <Grid DockPanel.Dock="Top">
-          <Grid.RowDefinitions>
+            <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
 
                 <RowDefinition Height="Auto"/>
@@ -18,18 +18,25 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
-            
-              <Label>CS:</Label>
-            <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Grid.Column="1" Text="{Binding CS}" Height="60"/>
+
+
+            <Label>CS:</Label>
+            <DockPanel Grid.Column="1">
+ <Button DockPanel.Dock="Right">Add</Button>  
+              <TextBox DockPanel.Dock="Right" Width="100" Text="{Binding Name}"/>
+                <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Text="{Binding CS}" Height="60"/>
+  
+
+            </DockPanel>
+
             <Label Grid.Row="1">Query:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Query}"/>        
-            
+            <TextBox Height="100" Grid.Row="1" Grid.Column="1" Text="{Binding Query}"/>
+
             <Label Grid.Row="2">Macros:</Label>
             <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Macroses}" SelectedItem="{Binding SelectedMacros}" />
-        </Grid> 
+        </Grid>
         <Button DockPanel.Dock="Bottom" Command="{Binding GenerateCommand}" >Do</Button>
         <TextBox DockPanel.Dock="Top" Text="{Binding Result}"/>
-      
+
     </DockPanel>
 </UserControl>

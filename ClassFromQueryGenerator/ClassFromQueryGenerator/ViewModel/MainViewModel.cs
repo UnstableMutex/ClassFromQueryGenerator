@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -41,8 +42,27 @@ namespace ClassFromQueryGenerator.ViewModel
             ////}
            GenerateCommand = new SimpleCommand(Generate);
             CS =@"Data Source=SSMRDB2\GENESISINSTANCE;Initial Catalog=Genesis;Persist Security Info=True;User ID=GenesisUser;Password=qW12Ltakz;MultipleActiveResultSets=True";
-            Query = "select top 1 * from contractbases";
+            Query = @"";
+            RememberCSCommand = new SimpleCommand(RememberCS);
         }
+
+        void RememberCS()
+        {
+            var datapath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var path = Path.Combine(datapath, Constants.AppName, "ConnectionStrings.settings");
+            var file= new FileInfo(path);
+            Directory.CreateDirectory(file.DirectoryName);
+
+
+
+
+
+
+        }
+
+
+        public ICommand RememberCSCommand { get;private set; }
+
         public string CS { get; set; }
         public string Query { get; set; }
         public ICommand GenerateCommand { get; set; }
