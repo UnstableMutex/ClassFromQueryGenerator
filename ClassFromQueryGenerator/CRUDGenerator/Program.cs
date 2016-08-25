@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,14 +30,21 @@ and ku.table_name='"+tableName+"'";
             var db = new SqlDatabase(cs);
             var cols = db.ExecuteSqlStringAccessor<ColumnData>(querycols).ToList();
 
+         var ti = new TableInfo();
+            ti.Columns = new List<ColumnData>(cols);
+           
+
             var pkName = db.ExecuteScalar( CommandType.Text,  queryPK);
 
             var pkNames = pkName.ToString();
 
+            ti.PKName = pkNames;
 
 
-
-
+            SPGen g=new SPGen(ti);
+          var result=  g.Generate("test");
+            Console.WriteLine(result);
+            Console.ReadKey();
 
 
 
@@ -50,5 +58,32 @@ and ku.table_name='"+tableName+"'";
 
 
         }
+    }
+    class SPGen
+    {
+        private readonly TableInfo _tableInfo;
+
+        private readonly string _cs;
+        private readonly string _tableName;
+        private readonly string _classMacro;
+        private readonly string _propMacro;
+        public SPGen(TableInfo tableInfo)
+        {
+            _tableInfo = tableInfo;
+        }
+
+        public string Generate(string shortFN)
+        {
+            var engine = IronPython.Hosting.Python.CreateEngine();
+            var scope = engine.CreateScope();
+            scope.SetVariable("Model", _tableInfo);
+            var pyf =  shortFN + ".py";
+
+            var res = engine.ExecuteFile(pyf, scope);
+            var result = res.GetVariable("result").ToString();
+            return result;
+
+        }
+        public string Test { get; set; }
     }
 }

@@ -6,9 +6,15 @@ using System.Threading.Tasks;
 
 namespace CRUDGenerator
 {
-    class ColumnData
+   public class ColumnData
     {
         public string Name { get; set; }
         public string SQLType { get; set; }
+    }
+
+   public class TableInfo
+    {
+        public IReadOnlyList<ColumnData> Columns { get; set; }  
+        public string PKName { get; set; }
     }
 }
