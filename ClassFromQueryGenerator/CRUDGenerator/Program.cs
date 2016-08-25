@@ -38,7 +38,7 @@ and ku.table_name='" + tableName + "'";
             ti.Columns = new List<ColumnData>(cols);
             ti.UsualColumns = new List<ColumnData>(usualCols);
             SPGen g = new SPGen(ti);
-            var result = g.Generate("update");
+            var result = g.Generate("SelectByKey");
             Console.WriteLine(result);
             Console.ReadKey();
         }
