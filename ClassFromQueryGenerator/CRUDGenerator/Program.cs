@@ -77,7 +77,7 @@ and ku.table_name='" + tableName + "'";
             var engine = IronPython.Hosting.Python.CreateEngine();
             var scope = engine.CreateScope();
             scope.SetVariable("Model", _tableInfo);
-            var pyf = shortFN + ".py";
+            var pyf = "..\\..\\..\\CRUDPyMacros\\" + shortFN + ".py";
 
             var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
