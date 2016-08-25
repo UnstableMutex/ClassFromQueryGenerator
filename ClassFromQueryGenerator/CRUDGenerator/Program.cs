@@ -29,41 +29,18 @@ and ku.table_name='" + tableName + "'";
 
             var db = new SqlDatabase(cs);
             var cols = db.ExecuteSqlStringAccessor<ColumnData>(querycols).ToList();
-
             var pkName = db.ExecuteScalar(CommandType.Text, queryPK);
-
             var pkNames = pkName.ToString();
             var ti = new TableInfo();
             ti.PK = cols.Single(x => x.Name == pkNames);
-
             var usualCols = cols.Where(x => x.Name != pkNames);
-
             ti.TableName = tableName;
             ti.Columns = new List<ColumnData>(cols);
             ti.UsualColumns = new List<ColumnData>(usualCols);
-
-
-
-
-
-
-
             SPGen g = new SPGen(ti);
             var result = g.Generate("update");
             Console.WriteLine(result);
             Console.ReadKey();
-
-
-
-
-
-
-
-
-
-
-
-
         }
     }
     class SPGen
