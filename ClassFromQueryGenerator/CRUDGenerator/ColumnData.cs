@@ -16,5 +16,6 @@ namespace CRUDGenerator
     {
         public IReadOnlyList<ColumnData> Columns { get; set; }  
         public string PKName { get; set; }
+        public string TableName { get; set; }
     }
 }

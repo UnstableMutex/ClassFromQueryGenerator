@@ -31,7 +31,9 @@ and ku.table_name='" + tableName + "'";
             var cols = db.ExecuteSqlStringAccessor<ColumnData>(querycols).ToList();
 
             var ti = new TableInfo();
+            ti.TableName = tableName;
             ti.Columns = new List<ColumnData>(cols);
+
 
 
             var pkName = db.ExecuteScalar(CommandType.Text, queryPK);
@@ -39,6 +41,7 @@ and ku.table_name='" + tableName + "'";
             var pkNames = pkName.ToString();
 
             ti.PKName = pkNames;
+
 
 
             SPGen g = new SPGen(ti);
