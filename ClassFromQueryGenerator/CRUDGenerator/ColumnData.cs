@@ -15,7 +15,8 @@ namespace CRUDGenerator
    public class TableInfo
     {
         public IReadOnlyList<ColumnData> Columns { get; set; }  
-        public string PKName { get; set; }
+        public IReadOnlyList<ColumnData> UsualColumns { get; set; } 
+        public ColumnData PK { get; set; }
         public string TableName { get; set; }
     }
 }
