@@ -18,31 +18,31 @@ namespace CRUDGenerator
             string cs = @"Server=sam-cld-43089-2\DEV;Database=test;Trusted_Connection=True;";
             string tableName = "t";
             string querycols = @"select column_name as Name,data_type as SQLType from information_schema.columns
- where table_name = '"+tableName+"' order by ordinal_position";
+ where table_name = '" + tableName + "' order by ordinal_position";
             string queryPK = @"SELECT column_name as primarykeycolumn
 FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS AS TC
 INNER JOIN
 INFORMATION_SCHEMA.KEY_COLUMN_USAGE AS KU
 ON TC.CONSTRAINT_TYPE = 'PRIMARY KEY' AND
 TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME
-and ku.table_name='"+tableName+"'";
+and ku.table_name='" + tableName + "'";
 
             var db = new SqlDatabase(cs);
             var cols = db.ExecuteSqlStringAccessor<ColumnData>(querycols).ToList();
 
-         var ti = new TableInfo();
+            var ti = new TableInfo();
             ti.Columns = new List<ColumnData>(cols);
-           
 
-            var pkName = db.ExecuteScalar( CommandType.Text,  queryPK);
+
+            var pkName = db.ExecuteScalar(CommandType.Text, queryPK);
 
             var pkNames = pkName.ToString();
 
             ti.PKName = pkNames;
 
 
-            SPGen g=new SPGen(ti);
-          var result=  g.Generate("test");
+            SPGen g = new SPGen(ti);
+            var result = g.Generate("test");
             Console.WriteLine(result);
             Console.ReadKey();
 
@@ -77,7 +77,7 @@ and ku.table_name='"+tableName+"'";
             var engine = IronPython.Hosting.Python.CreateEngine();
             var scope = engine.CreateScope();
             scope.SetVariable("Model", _tableInfo);
-            var pyf =  shortFN + ".py";
+            var pyf = shortFN + ".py";
 
             var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
