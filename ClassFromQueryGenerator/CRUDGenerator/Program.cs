@@ -16,6 +16,9 @@ namespace CRUDGenerator
         static void Main(string[] args)
         {
             string cs = @"Server=sam-cld-43089-2\DEV;Database=test;Trusted_Connection=True;";
+
+
+
             string tableName = "t";
             string querycols = @"select column_name as Name,data_type as SQLType from information_schema.columns
  where table_name = '" + tableName + "' order by ordinal_position";
@@ -43,31 +46,5 @@ and ku.table_name='" + tableName + "'";
             Console.ReadKey();
         }
     }
-    class SPGen
-    {
-        private readonly TableInfo _tableInfo;
-
-        private readonly string _cs;
-        private readonly string _tableName;
-        private readonly string _classMacro;
-        private readonly string _propMacro;
-        public SPGen(TableInfo tableInfo)
-        {
-            _tableInfo = tableInfo;
-        }
-
-        public string Generate(string shortFN)
-        {
-            var engine = IronPython.Hosting.Python.CreateEngine();
-            var scope = engine.CreateScope();
-            scope.SetVariable("Model", _tableInfo);
-            var pyf = "..\\..\\..\\CRUDPyMacros\\" + shortFN + ".py";
-
-            var res = engine.ExecuteFile(pyf, scope);
-            var result = res.GetVariable("result").ToString();
-            return result;
-
-        }
-        public string Test { get; set; }
-    }
+   
 }
