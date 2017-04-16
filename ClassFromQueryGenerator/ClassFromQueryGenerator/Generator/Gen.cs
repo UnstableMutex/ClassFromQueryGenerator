@@ -24,8 +24,10 @@ namespace ClassFromQueryGenerator.Generator
             var engine = IronPython.Hosting.Python.CreateEngine();
             var scope = engine.CreateScope();
             scope.SetVariable("Model", _resultInfo);
-            var pyf =Path.Combine(Constants.MacroPath,shortFN+".py");
-
+            var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            dir = dir.Parent.Parent.Parent;
+            var macrodir = new DirectoryInfo(Path.Combine(dir.FullName, "PyMacros"));
+            var pyf =Path.Combine(macrodir.FullName,shortFN+".py");
             var res = engine.ExecuteFile(pyf, scope);
             var result = res.GetVariable("result").ToString();
             return result;

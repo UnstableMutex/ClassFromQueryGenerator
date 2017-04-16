@@ -40,8 +40,8 @@ namespace ClassFromQueryGenerator.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
-           GenerateCommand = new SimpleCommand(Generate);
-            CS =@"Data Source=SSMRDB2\GENESISINSTANCE;Initial Catalog=Genesis;Persist Security Info=True;User ID=GenesisUser;Password=qW12Ltakz;MultipleActiveResultSets=True";
+            GenerateCommand = new SimpleCommand(Generate);
+            CS = @"Server=.;Database=AdventureWorks2014;Trusted_Connection=True;";
             Query = @"";
             RememberCSCommand = new SimpleCommand(RememberCS);
         }
@@ -50,7 +50,7 @@ namespace ClassFromQueryGenerator.ViewModel
         {
             var datapath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             var path = Path.Combine(datapath, Constants.AppName, "ConnectionStrings.settings");
-            var file= new FileInfo(path);
+            var file = new FileInfo(path);
             Directory.CreateDirectory(file.DirectoryName);
 
 
@@ -61,7 +61,7 @@ namespace ClassFromQueryGenerator.ViewModel
         }
 
 
-        public ICommand RememberCSCommand { get;private set; }
+        public ICommand RememberCSCommand { get; private set; }
 
         public string CS { get; set; }
         public string Query { get; set; }
@@ -75,27 +75,32 @@ namespace ClassFromQueryGenerator.ViewModel
 
         private IEnumerable<string> GetFiles()
         {
-            var fils = Directory.GetFiles(Constants.MacroPath, "*.py");
-          var res=  fils.Select(Path.GetFileNameWithoutExtension);
+            var dir = new DirectoryInfo(Directory.GetCurrentDirectory());
+            dir = dir.Parent.Parent.Parent;
+            var macrodir = new DirectoryInfo(Path.Combine(dir.FullName, "PyMacros"));
+            var fils = Directory.GetFiles(macrodir.FullName, "*.py");
+            var res = fils.Select(Path.GetFileNameWithoutExtension);
             return res;
         }
 
         void Generate()
         {
-            FieldTypeConverter c=new FieldTypeConverter();
-            ResultInfo ri=new ResultInfo();
+            FieldTypeConverter c = new FieldTypeConverter();
+            ResultInfo ri = new ResultInfo();
             ri.Name = "test";
-            using (var conn=new SqlConnection(CS))
-            using (var cmd=conn.CreateCommand())
+            using (var conn = new SqlConnection(CS))
+            using (var cmd = conn.CreateCommand())
             {
-                (cmd.Connection=conn).Open();
+                (cmd.Connection = conn).Open();
                 cmd.CommandText = Query;
-                using (var r=cmd.ExecuteReader(CommandBehavior.KeyInfo))
+                using (var r = cmd.ExecuteReader(CommandBehavior.KeyInfo))
                 {
                     for (int i = 0; i < r.FieldCount; i++)
                     {
                         var name = r.GetName(i);
                         var type = r.GetFieldType(i);
+                        var sqlt = r.GetDataTypeName(i);
+                        var schema = r.GetSchemaTable();
                         FieldInfo fi = new FieldInfo
                         {
                             Type = c.Convert(type),
@@ -106,7 +111,7 @@ namespace ClassFromQueryGenerator.ViewModel
                 }
             }
             var a = ri;
-            Gen g=new Gen(a);
+            Gen g = new Gen(a);
             Result = g.Generate(SelectedMacros);
         }
 

@@ -8,7 +8,7 @@ namespace ClassFromQueryGenerator
 {
     class Constants
     {
-        public const string MacroPath= @"C:\Users\ShevyakovDY\Source\Repos\ClassFromQueryGenerator\ClassFromQueryGenerator\PyMacros";
+       
         public const string AppName = "ClassFromQueryGenerator";
     }
 }
