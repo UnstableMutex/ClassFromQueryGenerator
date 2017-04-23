@@ -1,0 +1,86 @@
+<#
+// T4DSG Version 1.6.0
+// https://nuget.org/packages/T4DSG
+//
+// Author Ivaylo Gochkov
+//
+#>
+<#@ template language="C#" debug="true" hostspecific="true" #>
+<#@ assembly name="System.Data" #>
+<#@ assembly name="System.XML" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Configuration" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Data" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Configuration" #>
+<#@ import namespace="System.Data.SqlClient" #>
+<#
+// To debug uncomment those lines:
+System.Diagnostics.Debugger.Launch();
+System.Diagnostics.Debugger.Break();
+
+ExeConfigurationFileMap configFile = new ExeConfigurationFileMap();
+configFile.ExeConfigFilename = GetConfigFile();
+var config = ConfigurationManager.OpenMappedExeConfiguration(configFile, ConfigurationUserLevel.None);
+string ConnectionString = config.ConnectionStrings.ConnectionStrings["t4dsg"].ConnectionString;
+string RootNamespace = "T4ClassGeneratorTry";
+string Namespace = RootNamespace;
+    SqlConnection connection = new SqlConnection(ConnectionString);
+	connection.Open();
+	
+	string queryTables = @"
+		SELECT T.TABLE_SCHEMA AS [SchemaName], 
+		T.TABLE_NAME AS [ObjectName]
+
+		FROM INFORMATION_SCHEMA.TABLES T
+	";
+	
+	SqlCommand cmd=connection.CreateCommand();
+	cmd.CommandText=queryTables;
+	using (var r = cmd.ExecuteReader())
+	{
+		while (r.Read())
+		{
+		var tablename=r.GetString(1);
+		var schemaname=r.GetString(0);
+		WriteClass(schemaname,tablename,ConnectionString);
+		
+		}
+	
+
+	}
+
+#>
+
+<#+
+void WriteClass(string schema,string table,string cs)
+{
+   Write("public class ");
+   Write(table);
+   Write("\n{\n}\n");
+}
+
+
+string GetConfigFile()
+{
+    IServiceProvider _ServiceProvider = (IServiceProvider)Host;
+    EnvDTE.DTE dte = (EnvDTE.DTE)_ServiceProvider.GetService(typeof(EnvDTE.DTE));
+    Array activeSolutionProjects = (Array)dte.ActiveSolutionProjects;
+    EnvDTE.Project project = (EnvDTE.Project)activeSolutionProjects.GetValue(0);
+	System.IO.FileInfo fileInfo = new System.IO.FileInfo(project.FullName);
+
+	foreach (EnvDTE.ProjectItem item in project.ProjectItems)
+	{
+		if (item.Name.Equals("App.config", StringComparison.InvariantCultureIgnoreCase) 
+	     || item.Name.Equals("Web.config", StringComparison.InvariantCultureIgnoreCase)) 
+		{
+			return fileInfo.Directory.FullName + "\\" + item.Name;
+        }
+	}
+
+	return String.Empty;
+}
+#>
