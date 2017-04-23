@@ -79,12 +79,35 @@ Write("}\n");
 
 void WriteClass(string schema,string table,string cs)
 {
-   Write("public class "+table);
+   Write("public class "+table+"\n{\n");
    WriteTable(schema,table,cs);
-   Write("\n{\n}\n");
+   Write("\n}\n");
 }
 void WriteTable(string schema,string table,string cs)
 {
+string query="select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='"+schema+"' and TABLE_NAME='"+table+"'";
+
+	SqlConnection c = new SqlConnection(cs);
+	c.Open();
+ 	SqlCommand cmd=c.CreateCommand();
+	cmd.CommandText=query;
+
+	PushIndent("\t");
+	using (var r = cmd.ExecuteReader())
+	{
+
+		while (r.Read())
+		{
+		var s1=r.GetString(0);
+	
+	Write("public string "+s1+ " {get;set;}\n");
+
+
+		}
+PopIndent();
+	}
+
+
 }
 
 
