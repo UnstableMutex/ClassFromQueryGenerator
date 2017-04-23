@@ -28,39 +28,63 @@ var config = ConfigurationManager.OpenMappedExeConfiguration(configFile, Configu
 string ConnectionString = config.ConnectionStrings.ConnectionStrings["t4dsg"].ConnectionString;
 string RootNamespace = "T4ClassGeneratorTry";
 string Namespace = RootNamespace;
-    SqlConnection connection = new SqlConnection(ConnectionString);
-	connection.Open();
-	
-	string queryTables = @"
-		SELECT T.TABLE_SCHEMA AS [SchemaName], 
-		T.TABLE_NAME AS [ObjectName]
+    SqlConnection cschemas = new SqlConnection(ConnectionString);
 
-		FROM INFORMATION_SCHEMA.TABLES T
-	";
+	cschemas.Open();
 	
-	SqlCommand cmd=connection.CreateCommand();
-	cmd.CommandText=queryTables;
+
+	string querySchemas=@"select SCHEMA_NAME from INFORMATION_SCHEMA.SCHEMATA";
+	
+	SqlCommand cmd=cschemas.CreateCommand();
+	cmd.CommandText=querySchemas;
 	using (var r = cmd.ExecuteReader())
 	{
 		while (r.Read())
 		{
-		var tablename=r.GetString(1);
-		var schemaname=r.GetString(0);
-		WriteClass(schemaname,tablename,ConnectionString);
-		
+		var s=r.GetString(0);
+		WriteSchema(s,ConnectionString);
 		}
-	
-
 	}
 
 #>
 
 <#+
+void WriteSchema(string schemaname,string cs)
+{
+	string queryTables = @"select TABLE_NAME from INFORMATION_SCHEMA.TABLES where TABLE_SCHEMA='"+schemaname+"'";
+	SqlConnection c = new SqlConnection(cs);
+	c.Open();
+ 	SqlCommand cmd=c.CreateCommand();
+	cmd.CommandText=queryTables;
+Write("namespace "+schemaname+"{\n");
+	PushIndent("\t");
+	using (var r = cmd.ExecuteReader())
+	{
+
+		while (r.Read())
+		{
+		var s1=r.GetString(0);
+	
+		WriteClass(schemaname,s1,cs);
+
+
+		}
+PopIndent();
+Write("}\n");
+	}
+
+
+
+}
+
 void WriteClass(string schema,string table,string cs)
 {
-   Write("public class ");
-   Write(table);
+   Write("public class "+table);
+   WriteTable(schema,table,cs);
    Write("\n{\n}\n");
+}
+void WriteTable(string schema,string table,string cs)
+{
 }
 
 
