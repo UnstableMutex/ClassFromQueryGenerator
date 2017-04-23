@@ -17,6 +17,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Configuration" #>
 <#@ import namespace="System.Data.SqlClient" #>
+using System;
 <#
 // To debug uncomment those lines:
 System.Diagnostics.Debugger.Launch();
@@ -85,7 +86,7 @@ void WriteClass(string schema,string table,string cs)
 }
 void WriteTable(string schema,string table,string cs)
 {
-string query="select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='"+schema+"' and TABLE_NAME='"+table+"'";
+string query="select column_name,data_type from INFORMATION_SCHEMA.COLUMNS where TABLE_SCHEMA='"+schema+"' and TABLE_NAME='"+table+"'";
 
 	SqlConnection c = new SqlConnection(cs);
 	c.Open();
@@ -99,8 +100,8 @@ string query="select column_name from INFORMATION_SCHEMA.COLUMNS where TABLE_SCH
 		while (r.Read())
 		{
 		var s1=r.GetString(0);
-	
-	Write("public string "+s1+ " {get;set;}\n");
+	var type=GetCSDataType(r.GetString(1));
+	Write("public "+type+" "+s1+ " {get;set;}\n");
 
 
 		}
@@ -109,7 +110,18 @@ PopIndent();
 
 
 }
-
+string GetCSDataType(string sqlType)
+{
+switch (sqlType)
+{
+case "int":
+return "int";
+case "datetime":
+return "DateTime";
+default:
+return "string";
+}
+}
 
 string GetConfigFile()
 {
