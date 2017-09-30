@@ -7,7 +7,7 @@
 <#@ import namespace="System.Data.SqlClient" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
-<#
+<
     string tableName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
     string path = Path.GetDirectoryName(Host.TemplateFile);
     string columnId ="ID";
@@ -54,7 +54,7 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
 				var dbtypename=reader.GetDataTypeName(i);
 #>		public <#= DBTypeNameToCSTypeName(dbtypename)  #> <#= colName #>  { get; set; }
 <#
-            }
+            }//close for
 #>	}
 }
 <#+
@@ -78,10 +78,9 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
 			return "string";
 		case "tinyint":
 			return "sbyte";
-			case "date":
-			case "datetime":
-			case "datetime2":
-
+		case "date":
+		case "datetime":
+		case "datetime2":
 			return "DateTime";
 		case "bit":
 			return "bool";
