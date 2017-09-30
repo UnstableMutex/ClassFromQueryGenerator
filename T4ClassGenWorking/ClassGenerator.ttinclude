@@ -38,15 +38,21 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
  
     conn.Open();
  
-    SqlDataReader reader = comm.ExecuteReader();
+    SqlDataReader reader = comm.ExecuteReader(CommandBehavior.SchemaOnly);
     bool loop = reader.Read();
  
   var colcount = reader.FieldCount;
             for (int i = 0; i < colcount; i++)
             {
                 var colName = reader.GetName(i);
+				colName=RemoveUnderline(colName);
+				if (colName==tableName)//Будет ошшибка что имя класса не должно совпадать с полем
+                {
+					colName+="1";
+				}
+
 				var dbtypename=reader.GetDataTypeName(i);
-#>		public <#= DBTypeNameToCSTypeName(dbtypename)  #> <#= colName #> {get;set;}
+#>		public <#= DBTypeNameToCSTypeName(dbtypename)  #> <#= colName #>  { get; set; }
 <#
             }
 #>	}
@@ -57,17 +63,33 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
         Regex rx = new Regex(@"(?:[^a-zA-Z0-9]*)(?<first>[a-zA-Z0-9])(?<reminder>[a-zA-Z0-9]*)(?:[^a-zA-Z0-9]*)");
         return rx.Replace(value.ToString(), m => m.Groups["first"].ToString().ToUpper() + m.Groups["reminder"].ToString().ToLower());
     }
+	private string RemoveUnderline(string fieldName)
+    {
+		return fieldName.Replace("_ID","ID");
+    }
 	private string DBTypeNameToCSTypeName(string dbtypename)
 	{
 	switch (dbtypename)
 		{	
 		case "smallint":
-		return "short";
-case "char":
+			return "short";
+		case "char":
 		case "varchar":
-		return "string";
+			return "string";
+		case "tinyint":
+			return "sbyte";
+			case "date":
+			case "datetime":
+			case "datetime2":
 
-			default:
+			return "DateTime";
+		case "bit":
+			return "bool";
+		case "uniqueidentifier":
+			return "Guid";
+		case "bigint":
+			return "long";
+		default:
 			return dbtypename;
         }
 	}
