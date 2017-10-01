@@ -7,7 +7,7 @@
 <#@ import namespace="System.Data.SqlClient" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text.RegularExpressions" #>
-<
+<#
     string tableName = Path.GetFileNameWithoutExtension(Host.TemplateFile);
     string path = Path.GetDirectoryName(Host.TemplateFile);
     string columnId ="ID";
@@ -33,7 +33,7 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
     {
 <#
     SqlConnection conn = new SqlConnection(connectionString);
-    string command = string.Format("select top 1 * from {3}", columnId, columnName, columnDescription, tableName);
+    string command = string.Format("select top 1 * from [{3}]", columnId, columnName, columnDescription, tableName);
     SqlCommand comm = new SqlCommand(command, conn);
  
     conn.Open();
@@ -54,7 +54,7 @@ namespace <#= project.Properties.Item("DefaultNamespace").Value #><#= Path.GetDi
 				var dbtypename=reader.GetDataTypeName(i);
 #>		public <#= DBTypeNameToCSTypeName(dbtypename)  #> <#= colName #>  { get; set; }
 <#
-            }//close for
+            }
 #>	}
 }
 <#+
